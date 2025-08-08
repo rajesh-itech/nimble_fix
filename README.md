@@ -24,10 +24,6 @@ The function was invoked once for saving form data into the database and a secon
 
 Refactored the code to ensure that the send-confirmation module is called only once after form submission, thereby combining the database save and email send logic into a single API call.
 
-```typescript
-
-```
-
 #### Impact
 
 - ✅ The API will now be called only once after form submission, reducing redundant requests and improving performance.
