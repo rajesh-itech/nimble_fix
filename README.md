@@ -6,7 +6,7 @@ Scheduling App
 
 ## Critical Fixes Implemented
 
-### 1. Multiple time calling of send-confirmation.
+### 1. Multiple time calling of send-confirmation
 
 **File**: `src/components/LeadCaptureForm.tsx`
 **Severity**: Critical
@@ -14,15 +14,15 @@ Scheduling App
 
 #### Problem
 
-In the LeadCaptureForm.tsx the suspense edge function service named " send-confirmation " is called twice.
+The send-confirmation suspense edge function service was being triggered twice during the lead capture process.
 
 #### Root Cause
 
-One time is was called for saving the data in the database. Second time it was called for sending the email.
+The function was invoked once for saving form data into the database and a second time for sending the confirmation email, leading to redundant API calls.
 
 #### Fix
 
-Removed multiple calling of send-confirmation module.
+Refactored the code to ensure that the send-confirmation module is called only once after form submission, thereby combining the database save and email send logic into a single API call.
 
 ```typescript
 
@@ -30,7 +30,7 @@ Removed multiple calling of send-confirmation module.
 
 #### Impact
 
-- ✅ Api will be called only single time after form submission.
+- ✅ The API will now be called only once after form submission, reducing redundant requests and improving performance.
 
 ---
 
@@ -42,16 +42,16 @@ Removed multiple calling of send-confirmation module.
 
 #### Problem
 
-Not able to start the backend on local.
+The backend could not be started locally due to missing dependencies and outdated configuration settings.
 
 #### Root Cause
 
-Supabase dev dependency was missing from the package.json file.
-Previous Version setup of configuration
+The Supabase CLI was missing from the devDependencies in package.json, and the config.toml file contained configurations compatible only with a previous Supabase version.
 
 #### Fix
 
-Added supabase in dev dependency and updated config.toml file according to latest version.
+Added Supabase CLI to devDependencies in package.json.
+Updated supabase/config.toml to align with the latest Supabase configuration format.
 
 ```json
 "devDependencies": {
@@ -88,7 +88,7 @@ console.log("Hello from Functions!")
 
 #### Impact
 
-- ✅ Any user will be able to setup supabase locally.
+- ✅ Developers can now successfully set up and run the Supabase backend locally without errors.
 
 ---
 
@@ -100,16 +100,17 @@ console.log("Hello from Functions!")
 
 #### Problem
 
-There are no backup message for the absence of OPENAI_API_KEY in the function named generatePersonalizedContent.
+The function generatePersonalizedContent did not provide a fallback message if the OPENAI_API_KEY environment variable was missing.
 
 #### Root Cause
 
-No Backup message setup f
-
+No conditional logic was implemented to handle the scenario where the API key is unavailable, resulting in potential runtime failures without a meaningful response.
 
 #### Fix
 
-Added backup text message and in return statementwith with OR condition if OPENAI_API_KEY is not present. Added error condition.
+Added a backup text message that is returned when the OPENAI_API_KEY is missing.
+Implemented an error-handling condition to log a warning and return a default welcome message.
+Added explicit error logging for any OpenAI API errors.
 
 ```ts
 // Backend
@@ -124,11 +125,16 @@ if (data.error) {
 }
 ```
 
+#### Impact
+
+- ✅ Ensures the application provides a meaningful default message even if the OPENAI_API_KEY is absent.
+- ✅ Improves reliability and user experience by preventing failures during content generation.
+
 # Welcome to your Lovable project
 
 ## Project info
 
-**URL**: https://lovable.dev/projects/94b52f1d-10a5-4e88-9a9c-5c12cf45d83a
+**URL**: <https://lovable.dev/projects/94b52f1d-10a5-4e88-9a9c-5c12cf45d83a>
 
 ## How can I edit this code?
 
